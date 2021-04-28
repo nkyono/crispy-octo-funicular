@@ -5,6 +5,37 @@ import (
 	"testing"
 )
 
+type index struct {
+	i int
+	j int
+}
+
+// tried to reduce memory usage by removing visited array
+// Didn't help, pretty sure the stack is killing the memory usage
+func NumIslandsMem(grid [][]byte) int {
+	res := 0
+
+	stack := []index{}
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid[0]); j++ {
+			if grid[i][j] == '1' {
+				stack = append(stack, index{i, j})
+				res++
+			}
+			for len(stack) > 0 {
+				v := stack[0]
+				if !(v.i < 0 || v.j < 0 || v.i >= len(grid) || v.j >= len(grid[0]) || grid[v.i][v.j] == '0') {
+					stack = append(stack, index{v.i - 1, v.j}, index{v.i, v.j - 1}, index{v.i + 1, v.j}, index{v.i, v.j + 1})
+					grid[v.i][v.j] = '0'
+				}
+				stack = stack[1:]
+			}
+		}
+	}
+
+	return res
+}
+
 func solve(grid [][]byte, i, j int, visited [][]bool) {
 	if i < 0 || j < 0 || i >= len(grid) || j >= len(grid[0]) || visited[i][j] || grid[i][j] == '0' {
 		return
@@ -33,11 +64,6 @@ func NumIslandsRecursive(grid [][]byte) int {
 	}
 
 	return res
-}
-
-type index struct {
-	i int
-	j int
 }
 
 func NumIslandsIterative(grid [][]byte) int {
@@ -107,6 +133,16 @@ func TestNumIslands(t *testing.T) {
 		testname := fmt.Sprintf("Recursive: %v", tt.in)
 		t.Run(testname, func(t *testing.T) {
 			ans := NumIslandsRecursive(tt.in)
+			if ans != tt.want {
+				t.Errorf("got %d, want %d", ans, tt.want)
+			}
+		})
+	}
+
+	for _, tt := range tests {
+		testname := fmt.Sprintf("Mem: %v", tt.in)
+		t.Run(testname, func(t *testing.T) {
+			ans := NumIslandsMem(tt.in)
 			if ans != tt.want {
 				t.Errorf("got %d, want %d", ans, tt.want)
 			}
