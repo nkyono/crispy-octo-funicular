@@ -52,6 +52,7 @@ func DoubleBinarySearch(arr []int, target int) []int {
 	return ans
 }
 
+// this doesn't actually work if there is only a singular instance of the target
 func SpecialBinarySearch(arr []int, target int) []int {
 	high, low := len(arr)-1, 0
 	mid := (high + low) / 2
