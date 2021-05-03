@@ -8,26 +8,62 @@ import (
 
 func SimpleArrayIntersection(arr1, arr2 []int) []int {
 	arr1Set := make(map[int]bool)
-	arr2Set := make(map[int]bool)
-	ans := []int{}
+	ans := make(map[int]bool)
 	for _, v := range arr1 {
 		arr1Set[v] = true
 	}
 	for _, v := range arr2 {
-		arr2Set[v] = true
-	}
-	for k := range arr1Set {
-		if _, ok := arr2Set[k]; ok {
-			ans = append(ans, k)
+		if _, ok := arr1Set[v]; ok {
+			ans[v] = true
 		}
 	}
-	// have to sort due to the fact that maps may not return keys in same order everytime
-	sort.Slice(ans, func(a, b int) bool {
-		return ans[a] < ans[b]
+	ret := []int{}
+	for k := range ans {
+		ret = append(ret, k)
+	}
+
+	sort.Slice(ret, func(a, b int) bool {
+		return ret[a] < ret[b]
 	})
+	return ret
+}
+
+/* Same as SimpleArrayIntersection, but with restrictions
+ * O(n) time and O(1) space (the resulting array of intersections is not taken into consideration).
+ * Lists are sorted.
+ */
+func RestrictedSimpleIntersection(arr1, arr2 []int) []int {
+	/*
+		// only need if the two input arrays need to be sorted, I assumed input arrays were already sorted
+		sort.Slice(arr1, func(a, b int) bool {
+			return arr1[a] < arr1[b]
+		})
+		sort.Slice(arr2, func(a, b int) bool {
+			return arr2[a] < arr2[b]
+		})
+	*/
+	ans := []int{}
+	if len(arr1) == 0 || len(arr2) == 0 {
+		return ans
+	}
+	for i, j := 0, 0; i < len(arr1) && j < len(arr2); {
+		if arr1[i] > arr2[j] {
+			j++
+		} else if arr1[i] < arr2[j] {
+			i++
+		} else {
+			if len(ans) == 0 || (arr1[i-1] != arr2[j-1] || arr1[i-1] != arr1[i]) {
+				ans = append(ans, arr1[i])
+			}
+			i++
+			j++
+		}
+	}
+
 	return ans
 }
 
+// simple slice comparator, used for testing
 func compSlice(a, b []int) bool {
 	if a == nil && b == nil {
 		return true
@@ -61,6 +97,7 @@ func TestArrayIntersection(t *testing.T) {
 	}{
 		{[]int{}, []int{1, 2, 3}, []int{}},
 		{[]int{1, 2, 3}, []int{1, 2, 3}, []int{1, 2, 3}},
+		{[]int{-2, -1, 0, 1, 2}, []int{-1}, []int{-1}},
 		{[]int{}, []int{}, []int{}},
 		{[]int{1, 2, 3, 4, 5}, []int{1, 2, 3}, []int{1, 2, 3}},
 		{[]int{1, 2, 3, 4, 5}, []int{4, 5}, []int{4, 5}},
@@ -73,9 +110,37 @@ func TestArrayIntersection(t *testing.T) {
 	}
 
 	for _, tt := range testsOne {
-		testname := fmt.Sprintf("Array Intersection II %v, %v", tt.inArr1, tt.inArr2)
+		testname := fmt.Sprintf("Simple Array Intersection %v, %v", tt.inArr1, tt.inArr2)
 		t.Run(testname, func(t *testing.T) {
 			ans := SimpleArrayIntersection(tt.inArr1, tt.inArr2)
+			if !compSlice(ans, tt.want) {
+				t.Errorf("got %v, want %v", ans, tt.want)
+			}
+		})
+	}
+
+	var testsTwo = []struct {
+		inArr1 []int
+		inArr2 []int
+		want   []int
+	}{
+		{[]int{-2, -1, 0, 1, 2}, []int{1, 2, 3}, []int{1, 2}},
+		{[]int{-2, -1, 0, 1, 2}, []int{-1}, []int{-1}},
+		{[]int{}, []int{1, 2, 3}, []int{}},
+		{[]int{}, []int{}, []int{}},
+		{[]int{1, 2, 3}, []int{1, 2, 3}, []int{1, 2, 3}},
+		{[]int{}, []int{}, []int{}},
+		{[]int{1, 2, 3, 4, 5}, []int{1, 2, 3}, []int{1, 2, 3}},
+		{[]int{1, 2, 3, 4, 5}, []int{4, 5}, []int{4, 5}},
+		{[]int{1, 2, 3, 4, 5}, []int{3}, []int{3}},
+		{[]int{1, 13, 22, 49, 89, 91}, []int{22, 49}, []int{22, 49}},
+		{[]int{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2}, []int{1, 1, 1, 1, 1, 2, 2, 2, 2}, []int{1, 2}},
+	}
+
+	for _, tt := range testsTwo {
+		testname := fmt.Sprintf("Restricted Simple Array Intersection %v, %v", tt.inArr1, tt.inArr2)
+		t.Run(testname, func(t *testing.T) {
+			ans := RestrictedSimpleIntersection(tt.inArr1, tt.inArr2)
 			if !compSlice(ans, tt.want) {
 				t.Errorf("got %v, want %v", ans, tt.want)
 			}
