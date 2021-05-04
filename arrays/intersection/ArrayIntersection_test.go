@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"sort"
 	"testing"
+
+	"../../sorts"
 )
 
 // Should just return the elements that are in both list (the intersection)
@@ -75,6 +77,23 @@ func RestrictedSimpleIntersection(arr1, arr2 []int) []int {
  */
 func ArrayIntersection(arr1, arr2 []int) []int {
 	ans := []int{}
+	sorts.Mergesort(arr1)
+	sorts.Mergesort(arr2)
+
+	if len(arr1) == 0 || len(arr2) == 0 {
+		return ans
+	}
+	for i, j := 0, 0; i < len(arr1) && j < len(arr2); {
+		if arr1[i] > arr2[j] {
+			j++
+		} else if arr1[i] < arr2[j] {
+			i++
+		} else {
+			ans = append(ans, arr1[i])
+			i++
+			j++
+		}
+	}
 
 	return ans
 }
@@ -157,33 +176,32 @@ func TestArrayIntersection(t *testing.T) {
 		})
 	}
 
-	/*
-		var testsTwo = []struct {
-			inArr1 []int
-			inArr2 []int
-			want   []int
-		}{
-			{[]int{}, []int{1, 2, 3}, []int{}},
-			{[]int{1, 2, 3}, []int{1, 2, 3}, []int{1, 2, 3}},
-			{[]int{}, []int{}, []int{}},
-			{[]int{1, 2, 3, 4, 5}, []int{1, 2, 3}, []int{1, 2, 3}},
-			{[]int{1, 2, 3, 4, 5}, []int{4, 5}, []int{4, 5}},
-			{[]int{1, 2, 3, 4, 5}, []int{3}, []int{3}},
-			{[]int{5, 6, 2, 7, 1, 3, 0, 9}, []int{2, 7, 1, 4}, []int{2, 7, 1}},
-			{[]int{5, 6, 2, 7, 1, 3, 0, 9}, []int{5, 2, 7, 1, 4}, []int{2, 7, 1}},
-			{[]int{5, 6, 2, 7, 1, 3, 0, 9}, []int{5, 2, 7, 1}, []int{2, 7, 1}},
-			{[]int{4, 9, 5, 9}, []int{9, 9, 4, 9}, []int{4, 9}},
-			{[]int{5, 6}, []int{7, 1, 5, 6}, []int{5, 6}},
-		}
+	var testsThree = []struct {
+		inArr1 []int
+		inArr2 []int
+		want   []int
+	}{
+		{[]int{}, []int{1, 2, 3}, []int{}},
+		{[]int{1, 2, 3}, []int{1, 2, 3}, []int{1, 2, 3}},
+		{[]int{}, []int{}, []int{}},
+		{[]int{1, 2, 3, 4, 5}, []int{1, 2, 3}, []int{1, 2, 3}},
+		{[]int{1, 2, 3, 4, 5}, []int{4, 5}, []int{4, 5}},
+		{[]int{1, 2, 3, 4, 5}, []int{3}, []int{3}},
+		{[]int{5, 6, 2, 7, 1, 3, 0, 9}, []int{2, 7, 1, 4}, []int{1, 2, 7}},
+		{[]int{5, 6, 2, 7, 1, 3, 0, 9}, []int{5, 2, 7, 1, 4}, []int{1, 2, 5, 7}},
+		{[]int{4, 9, 5, 9}, []int{9, 9, 4, 9}, []int{4, 9, 9}},
+		{[]int{5, 6}, []int{7, 1, 5, 6}, []int{5, 6}},
+		{[]int{1, 2, 2, 3, 4, 5}, []int{2, 2, 4}, []int{2, 2, 4}},
+	}
 
-		for _, tt := range testsTwo {
-			testname := fmt.Sprintf("Array Intersection II %v, %v", tt.inArr1, tt.inArr2)
-			t.Run(testname, func(t *testing.T) {
-				ans := SimpleArrayIntersection(tt.inArr1, tt.inArr2)
-				if !compSlice(ans, tt.want) {
-					t.Errorf("got %v, want %v", ans, tt.want)
-				}
-			})
-		}
-	*/
+	for _, tt := range testsThree {
+		testname := fmt.Sprintf("Array Intersection II %v, %v", tt.inArr1, tt.inArr2)
+		t.Run(testname, func(t *testing.T) {
+			ans := ArrayIntersection(tt.inArr1, tt.inArr2)
+			if !compSlice(ans, tt.want) {
+				t.Errorf("got %v, want %v", ans, tt.want)
+			}
+		})
+	}
+
 }

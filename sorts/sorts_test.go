@@ -9,7 +9,7 @@ import (
 
 // to run tests run: go test -v sorts/sorts_test.go sorts/MergeSort.go
 // need to run all files together
-func TestSorts(t *testing.T) {
+func TestMergesort(t *testing.T) {
 	var tests = []struct {
 		in   []int
 		want []int
@@ -23,7 +23,7 @@ func TestSorts(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		testname := fmt.Sprintf("Mergesort: %v", tt.in)
+		testname := fmt.Sprintf("%v", tt.in)
 		t.Run(testname, func(t *testing.T) {
 			ans := Mergesort(tt.in)
 			if !comparators.CompareSlice(ans, tt.want) {
