@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// Should just return the elements that are in both list (the intersection)
 func SimpleArrayIntersection(arr1, arr2 []int) []int {
 	arr1Set := make(map[int]bool)
 	ans := make(map[int]bool)
@@ -63,6 +64,21 @@ func RestrictedSimpleIntersection(arr1, arr2 []int) []int {
 	return ans
 }
 
+/* returns intersection of 2 arrays
+ * must return the amount of times
+ * (differs from simple because simple doesn't contain duplicates)
+ */
+
+/* You could pretty easily do a merge sort on the arrays O(n*logn) + O(m*logm)
+ * then you could do a O(n) iteration through using a algo similar to RestrictedSimpleIntersection
+ * O(n*logn) + O(m*logm) + O(n)
+ */
+func ArrayIntersection(arr1, arr2 []int) []int {
+	ans := []int{}
+
+	return ans
+}
+
 // simple slice comparator, used for testing
 func compSlice(a, b []int) bool {
 	if a == nil && b == nil {
@@ -78,12 +94,6 @@ func compSlice(a, b []int) bool {
 	}
 	return true
 }
-
-/*	[1,2,3,4,5], [2,3,4] ==> [2,3,4]
- *	a[0] == b[0], a++, b++
- *	a[0] != b[0] ??? => which should we iterate
- *	Dynamic Programming, if we keep an array
- */
 
 func TestArrayIntersection(t *testing.T) {
 	/* First test will test the simple array intersection
