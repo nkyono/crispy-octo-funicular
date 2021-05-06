@@ -67,7 +67,26 @@ func createTree(vals []int) *TreeNode {
 	return root
 }
 
+func checkTree(root *TreeNode, prev int) bool {
+	if root == nil {
+		return true
+	}
+	if !checkTree(root.Left, prev) {
+		return false
+	}
+	if prev != -1 && root.Val <= prev {
+		return false
+	}
+	prev = root.Val
+	return checkTree(root.Right, prev)
+}
+
+func isValidBST(root *TreeNode) bool {
+	return checkTree(root, -1)
+}
+
 func main() {
 	root := createTree([]int{4, 2, 7, 1, 3, 6, 9})
 	printTree(root)
+	fmt.Printf("%v", isValidBST(root))
 }
