@@ -41,7 +41,7 @@ func TestPalidromicSubstrings(t *testing.T) {
 		in   string
 		want int
 	}{
-		{"aaa", 5},
+		{"aaa", 6},
 		{"", 0},
 		{"a", 1},
 		{"aa", 3},
