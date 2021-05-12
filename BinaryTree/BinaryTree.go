@@ -14,8 +14,13 @@ type BinaryTree struct {
 // Creates a binary tree using a list of integers
 func CreateBinaryTree(values []int) *BinaryTree {
 	var bt *BinaryTree
+	// don't really think this should even be possible
+	if len(values) == 0 {
+		return bt
+	}
+	bt = &BinaryTree{values[0], nil, nil}
 
-	for _, v := range values {
+	for _, v := range values[1:] {
 		bt.AddNode(v)
 	}
 
@@ -39,8 +44,21 @@ func CompareTrees(a, b *BinaryTree) bool {
 	return false
 }
 
+// could add an error handler with an error return val, but not necessary really
 func (bt *BinaryTree) AddNode(val int) {
-
+	if val > bt.Val {
+		if bt.Right == nil {
+			bt.Right = &BinaryTree{val, nil, nil}
+		} else {
+			bt.Right.AddNode(val)
+		}
+	} else {
+		if bt.Left == nil {
+			bt.Left = &BinaryTree{val, nil, nil}
+		} else {
+			bt.Left.AddNode(val)
+		}
+	}
 }
 
 func (bt *BinaryTree) RemoveNode(val int) {
