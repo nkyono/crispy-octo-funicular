@@ -6,6 +6,32 @@ import (
 )
 
 func TestBinaryTree(t *testing.T) {
+	var testBinaryTreeComp = []struct {
+		inTreeA *BinaryTree
+		inTreeB *BinaryTree
+		want    bool
+	}{
+		{&BinaryTree{1, nil, nil}, &BinaryTree{1, nil, &BinaryTree{2, nil, nil}}, false},
+		{&BinaryTree{1, nil, nil}, &BinaryTree{1, nil, nil}, true},
+		{nil, nil, true},
+		{&BinaryTree{1, nil, &BinaryTree{2, nil, nil}}, &BinaryTree{1, nil, &BinaryTree{2, nil, nil}}, true},
+		{&BinaryTree{1, nil, &BinaryTree{2, nil, nil}}, &BinaryTree{1, nil, &BinaryTree{2, nil, &BinaryTree{3, nil, nil}}}, false},
+		{&BinaryTree{3, &BinaryTree{2, nil, nil}, &BinaryTree{4, nil, &BinaryTree{5, nil, nil}}}, &BinaryTree{3, &BinaryTree{2, &BinaryTree{1, nil, nil}, nil}, &BinaryTree{4, nil, &BinaryTree{5, nil, nil}}}, false},
+		{&BinaryTree{3, &BinaryTree{2, &BinaryTree{1, nil, nil}, nil}, &BinaryTree{4, nil, &BinaryTree{5, nil, nil}}}, &BinaryTree{3, &BinaryTree{2, &BinaryTree{1, nil, nil}, nil}, &BinaryTree{4, nil, &BinaryTree{5, nil, nil}}}, true},
+	}
+
+	// something is wrong with my with CompareTrees(a,b) function
+	// both print out the same string with ToString() but they aren't equivalent
+	for _, tt := range testBinaryTreeComp {
+		testname := fmt.Sprintf("%s %s", tt.inTreeA.ToString(), tt.inTreeB.ToString())
+		t.Run(testname, func(t *testing.T) {
+			ans := CompareTrees(tt.inTreeA, tt.inTreeB)
+			if ans != tt.want {
+				t.Errorf("got %v, want %v", ans, tt.want)
+			}
+		})
+	}
+
 	var testBinaryTreeAddNode = []struct {
 		inTree *BinaryTree
 		inVal  int
@@ -16,8 +42,6 @@ func TestBinaryTree(t *testing.T) {
 		{&BinaryTree{3, &BinaryTree{2, nil, nil}, &BinaryTree{4, nil, &BinaryTree{5, nil, nil}}}, 1, &BinaryTree{3, &BinaryTree{2, &BinaryTree{1, nil, nil}, nil}, &BinaryTree{4, nil, &BinaryTree{5, nil, nil}}}},
 	}
 
-	// something is wrong with my with CompareTrees(a,b) function
-	// both print out the same string with ToString() but they aren't equivalent
 	for _, tt := range testBinaryTreeAddNode {
 		testname := fmt.Sprintf("%s %d", tt.inTree.ToString(), tt.inVal)
 		t.Run(testname, func(t *testing.T) {
