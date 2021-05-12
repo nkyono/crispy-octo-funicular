@@ -20,8 +20,6 @@ func TestBinaryTree(t *testing.T) {
 		{&BinaryTree{3, &BinaryTree{2, &BinaryTree{1, nil, nil}, nil}, &BinaryTree{4, nil, &BinaryTree{5, nil, nil}}}, &BinaryTree{3, &BinaryTree{2, &BinaryTree{1, nil, nil}, nil}, &BinaryTree{4, nil, &BinaryTree{5, nil, nil}}}, true},
 	}
 
-	// something is wrong with my with CompareTrees(a,b) function
-	// both print out the same string with ToString() but they aren't equivalent
 	for _, tt := range testBinaryTreeComp {
 		testname := fmt.Sprintf("%s %s", tt.inTreeA.ToString(), tt.inTreeB.ToString())
 		t.Run(testname, func(t *testing.T) {
@@ -38,6 +36,7 @@ func TestBinaryTree(t *testing.T) {
 		want   *BinaryTree
 	}{
 		{&BinaryTree{1, nil, nil}, 2, &BinaryTree{1, nil, &BinaryTree{2, nil, nil}}},
+		{&BinaryTree{3, &BinaryTree{2, &BinaryTree{1, nil, nil}, nil}, &BinaryTree{5, nil, nil}}, 4, &BinaryTree{3, &BinaryTree{2, &BinaryTree{1, nil, nil}, nil}, &BinaryTree{5, &BinaryTree{4, nil, nil}, nil}}},
 		{&BinaryTree{1, nil, &BinaryTree{2, nil, nil}}, 3, &BinaryTree{1, nil, &BinaryTree{2, nil, &BinaryTree{3, nil, nil}}}},
 		{&BinaryTree{3, &BinaryTree{2, nil, nil}, &BinaryTree{4, nil, &BinaryTree{5, nil, nil}}}, 1, &BinaryTree{3, &BinaryTree{2, &BinaryTree{1, nil, nil}, nil}, &BinaryTree{4, nil, &BinaryTree{5, nil, nil}}}},
 	}

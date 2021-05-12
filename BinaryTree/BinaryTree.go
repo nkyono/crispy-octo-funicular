@@ -5,10 +5,12 @@ import (
 	"math"
 )
 
+// had Left and Right switched, which cause declarations to have the branches of the tree to be
+// on the opposite side than the side that I thought
 type BinaryTree struct {
 	Val   int
-	Right *BinaryTree
 	Left  *BinaryTree
+	Right *BinaryTree
 }
 
 // Creates a binary tree using a list of integers
