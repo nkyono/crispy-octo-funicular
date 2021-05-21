@@ -73,6 +73,7 @@ func TestLinkedList(t *testing.T) {
 		})
 	}
 
+	// pretty sure test work, but we are getting weird behavior, but I also suspect it's my fault
 	var testMerge = []struct {
 		inA  *LinkNode
 		inB  *LinkNode
