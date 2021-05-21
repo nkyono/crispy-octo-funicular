@@ -73,4 +73,25 @@ func TestLinkedList(t *testing.T) {
 		})
 	}
 
+	var testMerge = []struct {
+		inA  *LinkNode
+		inB  *LinkNode
+		want *LinkNode
+	}{
+		{&LinkNode{1, &LinkNode{2, &LinkNode{3, nil}}}, &LinkNode{4, &LinkNode{5, nil}}, &LinkNode{1, &LinkNode{2, &LinkNode{3, &LinkNode{4, &LinkNode{5, nil}}}}}},
+		{&LinkNode{1, nil}, &LinkNode{2, nil}, &LinkNode{1, &LinkNode{2, nil}}},
+		{&LinkNode{1, nil}, nil, &LinkNode{1, nil}},
+		{nil, &LinkNode{2, nil}, &LinkNode{2, nil}},
+	}
+
+	for _, tt := range testMerge {
+		testname := fmt.Sprintf("Merge %s", tt.inA.ToString())
+		t.Run(testname, func(t *testing.T) {
+			ans := MergeList(tt.inA, tt.inB)
+			if tt.want.CompareLinkedList(ans) {
+				t.Errorf("got %v, want %v", ans.ToString(), tt.want.ToString())
+			}
+		})
+	}
+
 }

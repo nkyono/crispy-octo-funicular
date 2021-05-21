@@ -54,3 +54,40 @@ func (a *LinkNode) CompareLinkedList(b *LinkNode) bool {
 	// check if a or b is nil
 	return (a == nil && b == nil)
 }
+
+func MergeList(a, b *LinkNode) *LinkNode {
+	if a == nil {
+		return b
+	} else if b == nil {
+		return a
+	}
+
+	var ans *LinkNode
+	if a.Val < b.Val {
+		ans = a
+	} else {
+		ans = b
+	}
+
+	for a != nil && b != nil {
+		if a.Val < b.Val {
+			temp := a
+			a = a.Next
+			ans.Next = temp
+		} else {
+			temp := b
+			b = b.Next
+			ans.Next = temp
+		}
+		ans = ans.Next
+	}
+
+	if a != nil {
+		ans.Next = a
+	}
+	if b != nil {
+		ans.Next = b
+	}
+
+	return ans
+}

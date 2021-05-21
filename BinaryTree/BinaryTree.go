@@ -63,6 +63,7 @@ func (bt *BinaryTree) AddNode(val int) {
 	}
 }
 
+// removing a node will have to do more work with rebalancing
 func (bt *BinaryTree) RemoveNode(val int) {
 
 }
